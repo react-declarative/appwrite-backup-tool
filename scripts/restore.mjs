@@ -13,7 +13,7 @@ if (!existsSync(".env")) {
 
 dotenv.config();
 
-const DOCUMENT_WRITE_DELAY = 1_000;
+const DOCUMENT_WRITE_DELAY = 100;
 const FILE_UPLOAD_DELAY = 2_000;
 
 const client = new sdk.Client();
