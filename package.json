@@ -4,7 +4,13 @@
   "description": "AppWrite backup toolset",
   "scripts": {
     "appwrite:backup": "node ./scripts/backup.mjs",
-    "appwrite:restore": "node ./scripts/restore.mjs"
+    "appwrite:restore": "node ./scripts/restore.mjs",
+    "appwrite:fetch": "sh ./tools/appwrite_fetch.sh",
+    "appwrite:push": "sh ./tools/appwrite_push.sh",
+    "appwrite:fetch:windows": ".\\tools\\appwrite_fetch.bat",
+    "appwrite:push:windows": ".\\tools\\appwrite_push.bat",
+    "appwrite:start": "sh ./docker/run.sh",
+    "appwrite:start:windows": ".\\docker\\run.bat"
   },
   "keywords": [],
   "author": "",

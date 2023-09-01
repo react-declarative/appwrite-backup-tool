@@ -7,7 +7,7 @@ import { glob } from "glob";
 import path from "path";
 
 if (!existsSync(".env")) {
-  console.log("Missing .env file. Please use .env.example as a template. Put it in");
+  console.log("Missing .env file. Please use .env.example as a template");
   process.exit(-1);
 }
 
