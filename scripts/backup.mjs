@@ -53,7 +53,6 @@ const listFiles = async function* (bucketId) {
       ...(lastId ? [Query.cursorAfter(lastId)] : []),
     ]);
     for (const file of files) {
-      result
       yield file;
     }
     counter += files.length;
@@ -95,7 +94,7 @@ await fs.mkdir("backup/buckets", { recursive: true });
 await fs.mkdir("backup/databases", { recursive: true });
 
 // Backup documents
-{
+if (false) {
   const { databases: databasesList, total } = await databases.list();
   console.log(`Found ${total} databases!`);
   for (const database of databasesList) {
