@@ -98,6 +98,7 @@ npm run appwrite:push
 > Windows
 
 ```cmd
+npx -y open-cli http://localhost:8080/
 npm run appwrite:start:windows
 ```
 
