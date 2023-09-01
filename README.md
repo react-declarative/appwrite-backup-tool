@@ -112,7 +112,6 @@ npm run appwrite:start
  - Authorize CLI in Docker AppWrite instance
 
 ```bash
-npx -y open-cli http://localhost:8080/
 appwrite client --selfSigned true --endpoint http://localhost:8080/v1
 appwrite login
 ```
