@@ -16,10 +16,12 @@ dotenv.config();
 const TOTAL_FILES_LIMIT = 100_000;
 const FILES_PAGE_SIZE = 100;
 
+const DOCUMENT_READ_DELAY = 100;
+
 const TOTAL_DOCUMENTS_LIMIT = 100_000;
 const DOCUMENTS_PAGE_SIZE = 100;
 
-const FILE_DOWNLOAD_DELAY = 1_000;
+const FILE_READ_DELAY = 1_000;
 
 const client = new sdk.Client();
 
@@ -34,30 +36,38 @@ if (process.env.APPWRITE_SELF_SIGNED) {
 const databases = new sdk.Databases(client);
 const storage = new sdk.Storage(client);
 
-const listFiles = async (bucketId) => {
-  const result = [];
+const sleep = (timeout = 1_000) => new Promise((res) => {
+  setTimeout(() => {
+    res();
+  }, timeout);
+});
+
+const listFiles = async function* (bucketId) {
+  let counter = 0;
   let lastId = null;
-  while (result.length <= TOTAL_FILES_LIMIT) {
+  while (counter <= TOTAL_FILES_LIMIT) {
     const { files } = await storage.listFiles(bucketId, [
       Query.limit(FILES_PAGE_SIZE),
       Query.orderDesc("$updatedAt"),
       ...(lastId ? [Query.cursorAfter(lastId)] : []),
     ]);
     for (const file of files) {
-      result.push(file);
+      result
+      yield file;
     }
+    counter += files.length;
     if (files.length < FILES_PAGE_SIZE) {
       break;
     }
     lastId = files[files.length - 1].$id;
+    await sleep(DOCUMENT_READ_DELAY);
   }
-  return result;
 };
 
-const listDocuments = async (databaseId, collectionId) => {
-  const result = [];
+const listDocuments = async function* (databaseId, collectionId) {
+  let counter = 0;
   let lastId = null;
-  while (result.length <= TOTAL_DOCUMENTS_LIMIT) {
+  while (counter <= TOTAL_DOCUMENTS_LIMIT) {
     const { documents } = await databases.listDocuments(
       databaseId,
       collectionId,
@@ -68,21 +78,16 @@ const listDocuments = async (databaseId, collectionId) => {
       ]
     );
     for (const document of documents) {
-      result.push(document);
+      yield document;
     }
+    counter += documents.length;
     if (documents.length < DOCUMENTS_PAGE_SIZE) {
       break;
     }
     lastId = documents[documents.length - 1].$id;
+    await sleep(FILE_READ_DELAY);
   }
-  return result;
 };
-
-const sleep = (timeout = 1_000) => new Promise((res) => {
-  setTimeout(() => {
-    res();
-  }, timeout);
-});
 
 await fs.mkdir("backup/buckets", { recursive: true });
 await fs.mkdir("backup/databases", { recursive: true });
@@ -97,13 +102,11 @@ await fs.mkdir("backup/databases", { recursive: true });
     );
     console.log(`Found ${total} collections id ${database.$id}!`);
     for (const collection of collections) {
-      console.log(`Getting list of documents in ${collection.$id}`);
-      const documents = await listDocuments(database.$id, collection.$id);
       console.log(`Making backup of ${collection.$id}`);
       await fs.mkdir(`backup/databases/${database.$id}/${collection.$id}`, {
         recursive: true,
       });
-      for (const document of documents) {
+      for await (const document of await listDocuments(database.$id, collection.$id)) {
         const data = await databases.getDocument(
           database.$id,
           collection.$id,
@@ -126,20 +129,17 @@ await fs.mkdir("backup/databases", { recursive: true });
   const { buckets, total } = await storage.listBuckets();
   console.log(`Found ${total} buckets!`);
   for (const bucket of buckets) {
-    console.log(`Getting list of files in ${bucket.$id}`);
-    const files = await listFiles(bucket.$id);
     console.log(`Making backup of ${bucket.$id}`);
     await fs.mkdir(`backup/buckets/${bucket.$id}`, { recursive: true });
-    for (const file of files) {
-      const metadata = await storage.getFile(bucket.$id, file.$id);
-      const extension = path.extname(metadata.name);
+    for await (const file of listFiles(bucket.$id)) {
+      const extension = path.extname(file.name);
       console.log(`Writing ${file.$id}${extension} from ${bucket.$id}`);
       const buffer = await storage.getFileView(bucket.$id, file.$id);
       await fs.writeFile(
         `backup/buckets/${bucket.$id}/${file.$id}${extension}`,
         buffer
       );
-      await sleep(FILE_DOWNLOAD_DELAY);
+      await sleep(FILE_READ_DELAY);
     }
   }
 }
