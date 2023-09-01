@@ -45,7 +45,7 @@ const sleep = (timeout = 1_000) => new Promise((res) => {
 const listFiles = async function* (bucketId) {
   let counter = 0;
   let lastId = null;
-  while (counter <= TOTAL_FILES_LIMIT) {
+  while (counter < TOTAL_FILES_LIMIT) {
     console.log(`Fetching bucket ${bucketId} starting from ${lastId || 0}`)
     const { files } = await storage.listFiles(bucketId, [
       Query.limit(FILES_PAGE_SIZE),
@@ -68,7 +68,7 @@ const listFiles = async function* (bucketId) {
 const listDocuments = async function* (databaseId, collectionId) {
   let counter = 0;
   let lastId = null;
-  while (counter <= TOTAL_DOCUMENTS_LIMIT) {
+  while (counter < TOTAL_DOCUMENTS_LIMIT) {
     console.log(`Fetching collection ${collectionId} from ${collectionId} starting from ${lastId || 0}`)
     const { documents } = await databases.listDocuments(
       databaseId,
