@@ -46,6 +46,7 @@ const listFiles = async function* (bucketId) {
   let counter = 0;
   let lastId = null;
   while (counter <= TOTAL_FILES_LIMIT) {
+    console.log(`Fetching bucket ${bucketId} starting from ${lastId || 0}`)
     const { files } = await storage.listFiles(bucketId, [
       Query.limit(FILES_PAGE_SIZE),
       Query.orderDesc("$updatedAt"),
@@ -68,6 +69,7 @@ const listDocuments = async function* (databaseId, collectionId) {
   let counter = 0;
   let lastId = null;
   while (counter <= TOTAL_DOCUMENTS_LIMIT) {
+    console.log(`Fetching collection ${collectionId} from ${collectionId} starting from ${lastId || 0}`)
     const { documents } = await databases.listDocuments(
       databaseId,
       collectionId,
