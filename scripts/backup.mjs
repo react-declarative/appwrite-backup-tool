@@ -19,13 +19,17 @@ const FILES_PAGE_SIZE = 100;
 const TOTAL_DOCUMENTS_LIMIT = 100_000;
 const DOCUMENTS_PAGE_SIZE = 100;
 
+const FILE_DOWNLOAD_DELAY = 1_000;
+
 const client = new sdk.Client();
 
-client
-  .setEndpoint(process.env.APPWRITE_ENDPOINT)
-  .setProject(process.env.APPWRITE_PROJECT_ID)
-  .setKey(process.env.APPWRITE_API_KEY)
-  .setSelfSigned();
+client.setEndpoint(process.env.APPWRITE_ENDPOINT)
+client.setProject(process.env.APPWRITE_PROJECT_ID)
+client.setKey(process.env.APPWRITE_API_KEY)
+
+if (process.env.APPWRITE_SELF_SIGNED) {
+  client.setSelfSigned();
+}
 
 const databases = new sdk.Databases(client);
 const storage = new sdk.Storage(client);
@@ -74,32 +78,16 @@ const listDocuments = async (databaseId, collectionId) => {
   return result;
 };
 
+const sleep = (timeout = 1_000) => new Promise((res) => {
+  setTimeout(() => {
+    res();
+  }, timeout);
+});
+
 await fs.mkdir("backup/buckets", { recursive: true });
 await fs.mkdir("backup/databases", { recursive: true });
 
-{
-  const { buckets, total } = await storage.listBuckets();
-
-  console.log(`Found ${total} buckets!`);
-
-  for (const bucket of buckets) {
-    console.log(`Getting list of files in ${bucket.$id}`);
-    const files = await listFiles(bucket.$id);
-    console.log(`Making backup of ${bucket.$id}`);
-    await fs.mkdir(`backup/buckets/${bucket.$id}`, { recursive: true });
-    for (const file of files) {
-      const metadata = await storage.getFile(bucket.$id, file.$id);
-      const extension = path.extname(metadata.name);
-      console.log(`Writing ${file.$id}${extension} from ${bucket.$id}`);
-      const buffer = await storage.getFileView(bucket.$id, file.$id);
-      await fs.writeFile(
-        `backup/buckets/${bucket.$id}/${file.$id}${extension}`,
-        buffer
-      );
-    }
-  }
-}
-
+// Backup documents
 {
   const { databases: databasesList, total } = await databases.list();
   console.log(`Found ${total} databases!`);
@@ -129,6 +117,29 @@ await fs.mkdir("backup/databases", { recursive: true });
           JSON.stringify(data, null, 2)
         );
       }
+    }
+  }
+}
+
+// Backup files
+{
+  const { buckets, total } = await storage.listBuckets();
+  console.log(`Found ${total} buckets!`);
+  for (const bucket of buckets) {
+    console.log(`Getting list of files in ${bucket.$id}`);
+    const files = await listFiles(bucket.$id);
+    console.log(`Making backup of ${bucket.$id}`);
+    await fs.mkdir(`backup/buckets/${bucket.$id}`, { recursive: true });
+    for (const file of files) {
+      const metadata = await storage.getFile(bucket.$id, file.$id);
+      const extension = path.extname(metadata.name);
+      console.log(`Writing ${file.$id}${extension} from ${bucket.$id}`);
+      const buffer = await storage.getFileView(bucket.$id, file.$id);
+      await fs.writeFile(
+        `backup/buckets/${bucket.$id}/${file.$id}${extension}`,
+        buffer
+      );
+      await sleep(FILE_DOWNLOAD_DELAY);
     }
   }
 }

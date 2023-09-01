@@ -2,9 +2,13 @@
 
 > Minimalistic Appwrite schema dumper with data backup and restore features
 
+This backup tool will generate query for each document in AppWrite database and save them as a json files on a hard drive. That means It can handle as much documents as you need. Also there is a script to run AppWrite in Docker on localhost so you can test your backup.
+
 <a href="https://cloud.appwrite.io/card/64b53d046c81edba0b1a">
 	<img width="350" src="https://cloud.appwrite.io/v1/cards/cloud?userId=64b53d046c81edba0b1a" alt="Appwrite Cloud Card" />
 </a>
+
+Got a question? Feel free to [ask It in issues](https://github.com/react-declarative/appwrite-backup-tool/issues), I need traffic
 
 ## Setup
 
@@ -12,9 +16,9 @@
 
 > Windows
 
-```cmd
+```powershell
 npm install -g appwrite-cli
-Set-ExecutionPolicy RemoteSigned
+Set-ExecutionPolicy RemoteSigned # In PowerShell as Administrator
 appwrite client --endpoint https://cloud.appwrite.io/v1
 appwrite login
 ```
@@ -33,6 +37,7 @@ appwrite login
 APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
 APPWRITE_PROJECT_ID=64b53d0c41fcf5093b12
 APPWRITE_API_KEY=****
+APPWRITE_SELF_SIGNED=1
 ```
 
 ## Usage
@@ -44,6 +49,7 @@ APPWRITE_API_KEY=****
 > Crossplatform
 
 ```bash
+npx -y rimraf backup
 npm run appwrite:backup
 ```
 
@@ -98,5 +104,23 @@ npm run appwrite:start:windows
 > Linux
 
 ```bash
+npx -y open-cli http://localhost:8080/
 npm run appwrite:start
+```
+
+ - Authorize CLI in Docker AppWrite instance
+
+```bash
+npx -y open-cli http://localhost:8080/
+appwrite client --selfSigned true --endpoint http://localhost:8080/v1
+appwrite login
+```
+
+## File upload speed
+
+Looks like AppWrite file endpoint is limited `to 60 requests in every 1 minutes per IP address`. So [I added a delay](./scripts/restore.mjs), you can change it If you need to
+
+```javascript
+const DOCUMENT_WRITE_DELAY = 1_000;
+const FILE_WRITE_DELAY = 1_000;
 ```
