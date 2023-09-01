@@ -31,7 +31,7 @@ appwrite client --endpoint https://cloud.appwrite.io/v1
 appwrite login
 ```
 
-2. Write `.env` config in the root (/appwrite-backup-tool/.env) by using [.env.example](./.env.example)
+2. Write `.env` config in the root (`/appwrite-backup-tool-main/.env`) by using [.env.example](./.env.example)
 
 ```env
 APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
