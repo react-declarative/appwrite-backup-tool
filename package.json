@@ -1,0 +1,19 @@
+{
+  "name": "appwrite-backup-tool",
+  "version": "1.0.0",
+  "description": "AppWrite backup toolset",
+  "scripts": {
+    "appwrite:backup": "node ./backup.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "16.3.1",
+    "glob": "10.3.4",
+    "node-appwrite": "10.0.0"
+  },
+  "devDependencies": {
+    "@types/glob": "8.1.0"
+  }
+}
