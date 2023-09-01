@@ -26,7 +26,8 @@ appwrite login
 > Linux
 
 ```bash
-npm install -g appwrite-cli
+sudo npm config set unsafe-perm true
+sudo npm install -g appwrite-cli
 appwrite client --endpoint https://cloud.appwrite.io/v1
 appwrite login
 ```
