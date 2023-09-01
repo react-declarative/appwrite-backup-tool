@@ -1,6 +1,6 @@
 # appwrite-backup-tool
 
-> Minimalistic Appwrite schema dumper with data backup and restore features
+> Minimalistic Appwrite schema dumper with data backup, restore features
 
 This backup tool will generate query for each document in AppWrite database and save them as a json files on a hard drive. That means It can handle as much documents as you need. Also there is a script to run AppWrite in Docker on localhost so you can test your backup.
 
