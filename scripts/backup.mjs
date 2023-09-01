@@ -94,7 +94,7 @@ await fs.mkdir("backup/buckets", { recursive: true });
 await fs.mkdir("backup/databases", { recursive: true });
 
 // Backup documents
-if (false) {
+{
   const { databases: databasesList, total } = await databases.list();
   console.log(`Found ${total} databases!`);
   for (const database of databasesList) {
