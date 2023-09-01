@@ -2,7 +2,7 @@
 
 > Minimalistic Appwrite schema dumper with data backup, restore features
 
-This backup tool will generate query for each document in AppWrite database and save them as a json files on a hard drive. That means It can handle as much documents as you need. Also there is a script to run AppWrite in Docker on localhost so you can test your backup.
+This backup tool will generate query for each document in AppWrite database and save them as a json files on a hard drive. That means It can handle as much documents as you need. Also there is a script to run AppWrite in Docker on localhost so you can test your backup. Build on top of [AsyncGenerator API](https://javascript.info/async-iterators-generators)
 
 <a href="https://cloud.appwrite.io/card/64b53d046c81edba0b1a">
 	<img width="350" src="https://cloud.appwrite.io/v1/cards/cloud?userId=64b53d046c81edba0b1a" alt="Appwrite Cloud Card" />
