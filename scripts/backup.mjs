@@ -52,6 +52,7 @@ const listFiles = async function* (bucketId) {
       Query.orderDesc("$updatedAt"),
       ...(lastId ? [Query.cursorAfter(lastId)] : []),
     ]);
+    await sleep(DOCUMENT_READ_DELAY);
     for (const file of files) {
       yield file;
     }
@@ -60,7 +61,6 @@ const listFiles = async function* (bucketId) {
       break;
     }
     lastId = files[files.length - 1].$id;
-    await sleep(DOCUMENT_READ_DELAY);
   }
 };
 
@@ -78,6 +78,7 @@ const listDocuments = async function* (databaseId, collectionId) {
         ...(lastId ? [Query.cursorAfter(lastId)] : []),
       ]
     );
+    await sleep(FILE_READ_DELAY);
     for (const document of documents) {
       yield document;
     }
@@ -86,7 +87,6 @@ const listDocuments = async function* (databaseId, collectionId) {
       break;
     }
     lastId = documents[documents.length - 1].$id;
-    await sleep(FILE_READ_DELAY);
   }
 };
 
