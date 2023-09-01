@@ -107,7 +107,7 @@ await fs.mkdir("backup/databases", { recursive: true });
       await fs.mkdir(`backup/databases/${database.$id}/${collection.$id}`, {
         recursive: true,
       });
-      for await (const document of await listDocuments(database.$id, collection.$id)) {
+      for await (const document of listDocuments(database.$id, collection.$id)) {
         const data = await databases.getDocument(
           database.$id,
           collection.$id,
