@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "AppWrite backup toolset",
   "scripts": {
-    "appwrite:backup": "node ./backup.mjs"
+    "appwrite:backup": "node ./scripts/backup.mjs",
+    "appwrite:restore": "node ./scripts/restore.mjs"
   },
   "keywords": [],
   "author": "",

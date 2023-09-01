@@ -1,13 +1,14 @@
 import sdk, { Query } from "node-appwrite";
 
 import dotenv from "dotenv";
+import { existsSync } from 'fs';
 import fs from "fs/promises";
 import { glob } from "glob";
 import path from "path";
 
-if (path.existsSync('.env')) { 
-    console.log('Missing .env file. Please use .env.example as a template');
-    return;
+if (!existsSync(".env")) {
+  console.log("Missing .env file. Please use .env.example as a template. Put it in");
+  process.exit(-1);
 }
 
 dotenv.config();
@@ -115,27 +116,36 @@ await fs.mkdir("backup/databases", { recursive: true });
         recursive: true,
       });
       for (const document of documents) {
-        const data = await databases.getDocument(database.$id, collection.$id, document.$id);
-        console.log(`Writing ${document.$id} from ${collection.$id} from ${database.$id}`);
-        await fs.writeFile(`backup/databases/${database.$id}/${collection.$id}/${document.$id}.json`, JSON.stringify(data, null, 2), );
+        const data = await databases.getDocument(
+          database.$id,
+          collection.$id,
+          document.$id
+        );
+        console.log(
+          `Writing ${document.$id} from ${collection.$id} from ${database.$id}`
+        );
+        await fs.writeFile(
+          `backup/databases/${database.$id}/${collection.$id}/${document.$id}.json`,
+          JSON.stringify(data, null, 2)
+        );
       }
     }
   }
 }
 
 {
-    console.log('Checking backup consistence...');
-    const databaseFiles = await glob(`backup/databases/*/*/*.json`);
-    let isOk = true;
-    for (const file of databaseFiles) {
-        try {
-            JSON.parse(await fs.readFile(file));
-        } catch {
-            isOk = false;
-            console.log(`${path} is broken!`);
-        }
+  console.log("Checking backup consistence...");
+  const databaseFiles = await glob(`backup/databases/*/*/*.json`);
+  let isOk = true;
+  for (const file of databaseFiles) {
+    try {
+      JSON.parse(await fs.readFile(file));
+    } catch {
+      isOk = false;
+      console.log(`${path} is broken!`);
     }
-    if (isOk) {
-        console.log('Everything is OK');
-    }
+  }
+  if (isOk) {
+    console.log("Everything is OK");
+  }
 }
