@@ -134,7 +134,7 @@ await fs.mkdir("backup/databases", { recursive: true });
     await fs.mkdir(`backup/buckets/${bucket.$id}`, { recursive: true });
     for await (const file of listFiles(bucket.$id)) {
       const extension = path.extname(file.name);
-      console.log(`Writing ${file.$id}${extension} from ${bucket.$id}`);
+      console.log(`Writing ${file.$id} from ${bucket.$id} (${extension})`);
       const buffer = await storage.getFileView(bucket.$id, file.$id);
       await fs.writeFile(
         `backup/buckets/${bucket.$id}/${file.$id}${extension}`,
