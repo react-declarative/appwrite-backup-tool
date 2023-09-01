@@ -52,7 +52,7 @@ const listFiles = async function* (bucketId) {
       Query.orderDesc("$updatedAt"),
       ...(lastId ? [Query.cursorAfter(lastId)] : []),
     ]);
-    await sleep(DOCUMENT_READ_DELAY);
+    await sleep(FILE_READ_DELAY);
     for (const file of files) {
       yield file;
     }
@@ -78,7 +78,7 @@ const listDocuments = async function* (databaseId, collectionId) {
         ...(lastId ? [Query.cursorAfter(lastId)] : []),
       ]
     );
-    await sleep(FILE_READ_DELAY);
+    await sleep(DOCUMENT_READ_DELAY);
     for (const document of documents) {
       yield document;
     }
@@ -108,17 +108,12 @@ await fs.mkdir("backup/databases", { recursive: true });
         recursive: true,
       });
       for await (const document of listDocuments(database.$id, collection.$id)) {
-        const data = await databases.getDocument(
-          database.$id,
-          collection.$id,
-          document.$id
-        );
         console.log(
           `Writing ${document.$id} from ${collection.$id} from ${database.$id}`
         );
         await fs.writeFile(
           `backup/databases/${database.$id}/${collection.$id}/${document.$id}.json`,
-          JSON.stringify(data, null, 2)
+          JSON.stringify(document, null, 2)
         );
       }
     }
