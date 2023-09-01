@@ -112,6 +112,8 @@ npm run appwrite:start
 
  - Authorize CLI in Docker AppWrite instance
 
+> Crossplatform
+
 ```bash
 appwrite client --selfSigned true --endpoint http://localhost:8080/v1
 appwrite login
