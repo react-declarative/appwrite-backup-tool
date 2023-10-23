@@ -75,9 +75,10 @@ const listDocuments = async function* (databaseId, collectionId, queries = []) {
       collectionId,
       [
         sdk.Query.orderDesc("$updatedAt"),
-        sdk.Query.limit(DOCUMENTS_PAGE_SIZE),
         ...(lastId ? [sdk.Query.cursorAfter(lastId)] : []),
-        ...queries,
+        sdk.Query.limit(DOCUMENTS_PAGE_SIZE),
+        ...query,
+        sdk.Query.limit(TOTAL_DOCUMENTS_LIMIT),
       ]
     );
   };
