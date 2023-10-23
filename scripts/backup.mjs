@@ -64,29 +64,41 @@ const listFiles = async function* (bucketId) {
   }
 };
 
-const listDocuments = async function* (databaseId, collectionId) {
-  let counter = 0;
+const listDocuments = async function* (databaseId, collectionId, queries = []) {
+  queries = queries.filter((value) => !!value);
   let lastId = null;
-  while (counter < TOTAL_DOCUMENTS_LIMIT) {
+
+  const createRequest = async () => {
     console.log(`Fetching collection ${collectionId} from ${collectionId} starting from ${lastId || 0}`)
-    const { documents } = await databases.listDocuments(
+    return await databases.listDocuments(
       databaseId,
       collectionId,
       [
-        Query.limit(DOCUMENTS_PAGE_SIZE),
-        Query.orderDesc("$updatedAt"),
-        ...(lastId ? [Query.cursorAfter(lastId)] : []),
+        sdk.Query.orderDesc("$updatedAt"),
+        sdk.Query.limit(DOCUMENTS_PAGE_SIZE),
+        ...(lastId ? [sdk.Query.cursorAfter(lastId)] : []),
+        ...queries,
       ]
     );
-    await sleep(DOCUMENT_READ_DELAY);
+  };
+
+  let counter = 0;
+  let lastQuery = createRequest();
+
+  while (counter < TOTAL_DOCUMENTS_LIMIT) {
+    const [{ documents }] = await Promise.all([
+      lastQuery,
+      sleep(DOCUMENT_READ_DELAY),
+    ]);
+    if (documents.length === 0) {
+      break;
+    }
+    lastId = documents[documents.length - 1].$id;
+    lastQuery = createRequest();
     for (const document of documents) {
       yield document;
     }
     counter += documents.length;
-    if (documents.length < DOCUMENTS_PAGE_SIZE) {
-      break;
-    }
-    lastId = documents[documents.length - 1].$id;
   }
 };
 
