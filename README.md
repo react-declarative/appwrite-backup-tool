@@ -92,6 +92,33 @@ npm run appwrite:push:windows
 npm run appwrite:push
 ```
 
+### Schema DIFF
+
+ - Show changed collection attributes by comparing `appwrite.json` and `appwrite.prev.json`
+
+> Crossplatform
+
+```bash
+npm run appwrite:diff
+```
+
+ - Output
+
+```text
+
+...
+
+COLLECTION APARTMENT
+ADD rent_kom_menedzher_unit
+ADD rent_kom_agency_unit
+ADD rent_kom_kommisiya_agenstva
+CHANGED rent_kom_czena_sobstvennika_valyuta (array true -> false)
+CHANGED rent_kom_komissiya_agenstva_unit (array true -> false)
+
+...
+
+```
+
 ### Other
 
  - Run AppWrite with [Docker Compose](https://docs.docker.com/compose/)

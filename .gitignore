@@ -3,3 +3,5 @@ node_modules
 backup
 schema
 .env
+appwrite.json
+appwrite.prev.json
