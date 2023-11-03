@@ -26,6 +26,12 @@ if (process.env.APPWRITE_SELF_SIGNED) {
   client.setSelfSigned();
 }
 
+const sleep = (timeout = 1_000) => new Promise((res) => {
+  setTimeout(() => {
+    res();
+  }, timeout);
+});
+
 const users = new sdk.Users(client);
 
 const tryRead = async (userId) => {
@@ -51,5 +57,6 @@ await fs.mkdir("backup/databases", { recursive: true });
       }
       console.log(`Creating ${$id} exist (${email})`);
       await users.create($id, email, phone, DEFAULT_PASSWORD);
+      await sleep(1_000);
     }
 }

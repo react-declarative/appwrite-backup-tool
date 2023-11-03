@@ -7,6 +7,7 @@
     "appwrite:restore": "node ./scripts/restore.mjs",
     "appwrite:diff": "node ./scripts/diff.mjs",
     "appwrite:create-users": "node ./scripts/create-users.mjs",
+    "appwrite:create-collection": "node ./scripts/create-collection.mjs",
     "appwrite:fetch": "sh ./tools/appwrite_fetch.sh",
     "appwrite:push": "sh ./tools/appwrite_push.sh",
     "appwrite:fetch:windows": ".\\tools\\appwrite_fetch.bat",
