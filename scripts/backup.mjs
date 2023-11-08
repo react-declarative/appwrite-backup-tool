@@ -78,7 +78,6 @@ const listDocuments = async function* (databaseId, collectionId, queries = []) {
         ...(lastId ? [sdk.Query.cursorAfter(lastId)] : []),
         sdk.Query.limit(DOCUMENTS_PAGE_SIZE),
         ...queries,
-        sdk.Query.limit(TOTAL_DOCUMENTS_LIMIT),
       ]
     );
   };
@@ -91,7 +90,7 @@ const listDocuments = async function* (databaseId, collectionId, queries = []) {
       lastQuery,
       sleep(DOCUMENT_READ_DELAY),
     ]);
-    if (documents.length === 0) {
+    if (documents.length < 2) {
       break;
     }
     lastId = documents[documents.length - 1].$id;
