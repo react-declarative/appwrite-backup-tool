@@ -14,7 +14,8 @@
     "appwrite:push:windows": ".\\tools\\appwrite_push.bat",
     "appwrite:start": "cd docker && sh ./run.sh",
     "appwrite:start:windows": "cd docker & run.bat",
-    "unsafe:remove-backup": "npx -y rimraf backup ./backup"
+    "unsafe:remove-backup": "npx -y rimraf backup ./backup",
+    "unsafe:uninstall-appwrite": "sh ./tools/docker_cleanup.sh"
   },
   "keywords": [],
   "author": "",
