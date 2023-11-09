@@ -14,7 +14,7 @@ dotenv.config();
 const USER_DATABASE_ID = '64c4de8e7b30179809ef';
 const USER_COLLECTION_ID = '64c4fb401e0a490e44bf';
 
-const DEFAULT_PASSWORD = 'alpine';
+const DEFAULT_PASSWORD = 'alpine123';
 
 const client = new sdk.Client();
 
@@ -50,13 +50,13 @@ await fs.mkdir("backup/databases", { recursive: true });
     for (const file of usersFiles) {
       const text = await fs.readFile(file);
       const data = JSON.parse(text);
-      const { $id, email, phone } = data;
+      const { $id, email } = data;
       if (await tryRead($id)) {
         console.log(`User ${$id} exist (${email})`);
         continue;
       }
-      console.log(`Creating ${$id} exist (${email})`);
-      await users.create($id, email, phone, DEFAULT_PASSWORD);
+      console.log(`Creating ${$id} user (${email})`);
+      await users.create($id, email, undefined, DEFAULT_PASSWORD);
       await sleep(1_000);
     }
 }
