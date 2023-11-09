@@ -146,6 +146,19 @@ appwrite client --selfSigned true --endpoint http://localhost:8080/v1
 appwrite login
 ```
 
+ - Start AppWrite self-hosted instance
+
+```bash
+docker-compose up -d --remove-orphans --renew-anon-volumes
+```
+
+ - Stop AppWrite self-hosted instance
+
+```
+docker-compose down
+```
+
+
 ## File upload speed
 
 Looks like AppWrite file endpoint is limited `to 60 requests in every 1 minutes per IP address`. So [I added a delay](./scripts/restore.mjs), you can change it If you need to

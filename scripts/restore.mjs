@@ -104,6 +104,7 @@ await fs.mkdir("backup/databases", { recursive: true });
     try {
       const prevDocument = await tryRead($databaseId, $collectionId, $id);
       if (prevDocument) {
+       //  await databases.updateDocument($databaseId, $collectionId, $id, writeTransform(data, $collectionId))
         continue
       }
       await databases.createDocument($databaseId, $collectionId, $id, writeTransform(data, $collectionId));
