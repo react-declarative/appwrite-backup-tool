@@ -27,7 +27,7 @@ if (!existsSync(".env")) {
 
 dotenv.config();
 
-const DOCUMENT_WRITE_DELAY = 100;
+const DOCUMENT_WRITE_DELAY = 500;
 const FILE_UPLOAD_DELAY = 2_000;
 
 const client = new sdk.Client();
@@ -104,12 +104,6 @@ await fs.mkdir("backup/databases", { recursive: true });
     try {
       const prevDocument = await tryRead($databaseId, $collectionId, $id);
       if (prevDocument) {
-        const currentUpdateAt = Number(new Date(prevDocument.$updatedAt));
-        const pendingUpdateAt = Number(new Date(data.$updatedAt));
-        if (currentUpdateAt >= pendingUpdateAt) {
-          console.log(`Document ${$id} outdated, patching`);
-          await databases.updateDocument($databaseId, $collectionId, $id, writeTransform(data, $collectionId));
-        }
         continue
       }
       await databases.createDocument($databaseId, $collectionId, $id, writeTransform(data, $collectionId));
