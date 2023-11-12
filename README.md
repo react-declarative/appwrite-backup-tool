@@ -148,7 +148,7 @@ appwrite client --selfSigned true --endpoint http://localhost:8080/v1
 appwrite login
 ```
 
- - Start AppWrite self-hosted instance
+ - Start AppWrite self-hosted instance (after `.env` changed)
 
 ```bash
 docker-compose up -d --remove-orphans --renew-anon-volumes
