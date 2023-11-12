@@ -32,7 +32,7 @@ appwrite client --endpoint https://cloud.appwrite.io/v1
 appwrite login
 ```
 
-2. Write `.env` config in the root (`/appwrite-backup-tool-main/.env`) by using [.env.example](./.env.example)
+2. [BACKUP, RESTORE] Write `.env` config in the root (`/appwrite-backup-tool-main/.env`) by using [.env.example](./.env.example)
 
 ```env
 APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
@@ -40,6 +40,8 @@ APPWRITE_PROJECT_ID=64b53d0c41fcf5093b12
 APPWRITE_API_KEY=****
 APPWRITE_SELF_SIGNED=1
 ```
+
+3. [RESTORE] Copy `appwrite.json` to the root (collections schema). See [https://appwrite.io/docs/tooling/command-line/deployment](https://appwrite.io/docs/tooling/command-line/deployment)
 
 ## Usage
 
