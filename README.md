@@ -156,10 +156,18 @@ docker-compose up -d --remove-orphans --renew-anon-volumes
 
  - Stop AppWrite self-hosted instance
 
-```
+```bash
 docker-compose down
 ```
 
+ - Uninstall AppWrite by removing all volumes and containers (clean install)
+
+```bash
+docker stop $(docker ps --filter status=running -q)
+docker rm $(docker ps -aq)
+docker volume rm $(docker volume ls -q --filter dangling=true)
+docker rmi $(docker images -a -q)
+```
 
 ## File upload speed
 
