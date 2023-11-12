@@ -169,11 +169,13 @@ docker volume rm $(docker volume ls -q --filter dangling=true)
 docker rmi $(docker images -a -q)
 ```
 
-## File upload speed
+## See also
 
 Looks like AppWrite file endpoint is limited `to 60 requests in every 1 minutes per IP address`. So [I added a delay](./scripts/restore.mjs), you can change it If you need to
 
+> Quite usefull when `AppwriteException [Error]: The document data is missing. Try again with document data populated`...
+
 ```javascript
-const DOCUMENT_WRITE_DELAY = 1_000;
-const FILE_WRITE_DELAY = 1_000;
+const DOCUMENT_WRITE_DELAY = 1500;
+const FILE_UPLOAD_DELAY = 2_000;
 ```
