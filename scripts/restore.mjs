@@ -1,10 +1,24 @@
 import sdk, { AppwriteException, InputFile } from "node-appwrite";
 
+import Module from "module";
 import dotenv from "dotenv";
 import { existsSync } from "fs";
 import fs from "fs/promises";
 import { glob } from "glob";
 import path from "path";
+
+const require = Module.createRequire(import.meta.url);
+
+const schema = require(path.join(process.cwd(), "./appwrite.json"));
+
+const HAS_COLLECTION_ATTRIBUTE = (collectionId, attributeKey) => {
+  const collection = schema.collections.find((item) => item.$id === collectionId);
+  if (!collection) {
+    return false;
+  }
+  const attribute = collection.attributes.find((item) => item.key === attributeKey);
+  return !!attribute;
+};
 
 if (!existsSync(".env")) {
   console.log("Missing .env file. Please use .env.example as a template");
@@ -13,7 +27,7 @@ if (!existsSync(".env")) {
 
 dotenv.config();
 
-const DOCUMENT_WRITE_DELAY = 100;
+const DOCUMENT_WRITE_DELAY = 500;
 const FILE_UPLOAD_DELAY = 2_000;
 
 const client = new sdk.Client();
@@ -29,9 +43,23 @@ if (process.env.APPWRITE_SELF_SIGNED) {
 const databases = new sdk.Databases(client);
 const storage = new sdk.Storage(client);
 
-const writeTransform = (data) => {
+const writeTransform = (data, collectionId) => {
   const userEntries = Object.entries(data)
-    .filter(([key]) => !key.startsWith("$"));
+    .filter(([key]) => !key.startsWith("$"))
+    .filter(([, value]) => value !== null)
+    .filter(([, value]) => {
+      if (Array.isArray(value)) {
+        return value?.length;
+      }
+      return true;
+    })
+    .filter(([key]) => {
+      const hasAttribute = HAS_COLLECTION_ATTRIBUTE(collectionId, key)
+      if (!hasAttribute) {
+        console.log(`SKIP ATTRIBUTE key=${key} collection=${collectionId}`)
+      }
+      return hasAttribute;
+    })
   return Object.fromEntries(userEntries);
 };
 
@@ -76,15 +104,10 @@ await fs.mkdir("backup/databases", { recursive: true });
     try {
       const prevDocument = await tryRead($databaseId, $collectionId, $id);
       if (prevDocument) {
-        const currentUpdateAt = Number(new Date(prevDocument.$updatedAt));
-        const pendingUpdateAt = Number(new Date(data.$updatedAt));
-        if (currentUpdateAt >= pendingUpdateAt) {
-          console.log(`Document ${$id} outdated, patching`);
-          await databases.updateDocument($databaseId, $collectionId, $id, writeTransform(data));
-        }
+       //  await databases.updateDocument($databaseId, $collectionId, $id, writeTransform(data, $collectionId))
         continue
       }
-      await databases.createDocument($databaseId, $collectionId, $id, writeTransform(data));
+      await databases.createDocument($databaseId, $collectionId, $id, writeTransform(data, $collectionId));
     } finally {
       await sleep(DOCUMENT_WRITE_DELAY);
     }

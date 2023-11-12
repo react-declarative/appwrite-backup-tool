@@ -1,6 +1,6 @@
+import Module from "module";
 import dotenv from "dotenv";
 import { existsSync } from "fs";
-import Module from "module";
 import path from "path";
 import sdk from "node-appwrite";
 
@@ -24,7 +24,7 @@ const GET_COLLECTION = (id) => {
 };
 
 const DATABASE_ID = '64c4de8e7b30179809ef';
-const COLLECTION_ID = '64c4fb401e0a490e44bf';
+const COLLECTION_ID = '64d7502a5ce9f881b680';
 
 const client = new sdk.Client();
 const databases = new sdk.Databases(client);
@@ -55,6 +55,7 @@ const { attributes, name } = GET_COLLECTION(COLLECTION_ID);
 
 {
     if (!(await hasCollection())) {
+        console.log(`Creating collection id=${COLLECTION_ID} name=${name}`);
         await databases.createCollection(DATABASE_ID, COLLECTION_ID, name);
     }
     for (const { key, type, required, array, size } of attributes) {
@@ -68,6 +69,6 @@ const { attributes, name } = GET_COLLECTION(COLLECTION_ID);
         if (type === "integer") {
             await databases.createIntegerAttribute(DATABASE_ID, COLLECTION_ID, key, required)
         }
-        await sleep(1_000);
+        await sleep(1_500);
     }
 }
