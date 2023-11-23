@@ -67,7 +67,7 @@ const { attributes, name } = GET_COLLECTION(COLLECTION_ID);
             await databases.createBooleanAttribute(DATABASE_ID, COLLECTION_ID, key, required, undefined, array);
         }
         if (type === "integer") {
-            await databases.createIntegerAttribute(DATABASE_ID, COLLECTION_ID, key, required)
+            await databases.createIntegerAttribute(DATABASE_ID, COLLECTION_ID, key, required, undefined, undefined, undefined, array);
         }
         await sleep(1_500);
     }
