@@ -160,13 +160,14 @@ docker-compose up -d --remove-orphans --renew-anon-volumes
 docker-compose down
 ```
 
- - Uninstall AppWrite by removing all volumes and containers (clean install)
+ - Uninstall AppWrite by removing all volumes and containers (clean install). Also remove networks to avoid mariadb DNS lookup error when downgrade from higher version of AppWrite to lower
 
 ```bash
 docker stop $(docker ps --filter status=running -q)
 docker rm $(docker ps -aq)
 docker volume rm $(docker volume ls -q --filter dangling=true)
 docker rmi $(docker images -a -q)
+docker network prune --force --filter until=1s
 ```
 
 ## See also
