@@ -161,7 +161,7 @@ await fs.mkdir("backup/databases", { recursive: true });
       JSON.parse(await fs.readFile(file));
     } catch {
       isOk = false;
-      console.log(`${path} is broken!`);
+      console.log(`${file} is broken!`);
     }
   }
   if (isOk) {
