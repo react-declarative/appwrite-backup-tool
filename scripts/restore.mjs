@@ -96,7 +96,7 @@ await fs.mkdir("backup/databases", { recursive: true });
 {
   const databaseFiles = await glob(`backup/databases/*/*/*.json`);
   console.log(`Found ${databaseFiles.length} collection documents`);
-  for (const file of databaseFiles) {
+  for (const file of databaseFiles.reverse()) {
     const text = await fs.readFile(file);
     const data = JSON.parse(text);
     const { $id, $databaseId, $collectionId } = data;
