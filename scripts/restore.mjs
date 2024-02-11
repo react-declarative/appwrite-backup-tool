@@ -147,6 +147,8 @@ await fs.mkdir("backup/databases", { recursive: true });
           fileId,
           InputFile.fromPath(file, fileName)
         );
+      } catch {
+        console.log(`Error uploading ${fileId} from ${bucketId}`);
       } finally {
         await sleep(FILE_UPLOAD_DELAY);
       }

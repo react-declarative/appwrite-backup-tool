@@ -142,12 +142,17 @@ await fs.mkdir("backup/databases", { recursive: true });
     for await (const file of listFiles(bucket.$id)) {
       const extension = path.extname(file.name);
       console.log(`Writing ${file.$id} from ${bucket.$id} ${extension ? `(${extension})` : ""}`);
-      const buffer = await storage.getFileView(bucket.$id, file.$id);
-      await fs.writeFile(
-        `backup/buckets/${bucket.$id}/${file.$id}${extension}`,
-        buffer
-      );
-      await sleep(FILE_READ_DELAY);
+      try {
+        const buffer = await storage.getFileView(bucket.$id, file.$id);
+        await fs.writeFile(
+          `backup/buckets/${bucket.$id}/${file.$id}${extension}`,
+          buffer
+        );
+      } catch {
+        console.log(`Error writing ${file.$id} from ${bucket.$id} ${extension ? `(${extension})` : ""}`);
+      } finally {
+        await sleep(FILE_READ_DELAY);
+      }
     }
   }
 }
