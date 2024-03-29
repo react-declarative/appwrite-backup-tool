@@ -23,7 +23,7 @@
   "dependencies": {
     "dotenv": "16.3.1",
     "glob": "10.3.4",
-    "node-appwrite": "10.0.0"
+    "node-appwrite": "12.0.1"
   },
   "devDependencies": {
     "@types/glob": "8.1.0"
