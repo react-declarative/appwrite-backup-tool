@@ -63,7 +63,7 @@ for (const collectionId of schema.collections.map(({ $id }) => $id)) {
         }
     };
 
-    if (!(await hasCollection())) {
+    if (await hasCollection()) {
         console.log(`Found collection id=${collectionId} name=${name}`);
     } else {
         console.log(`Creating collection id=${collectionId} name=${name}`);
