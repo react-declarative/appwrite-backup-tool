@@ -71,10 +71,12 @@ for (const collectionId of schema.collections.map(({ $id }) => $id)) {
     }
 
     for (const { key, type, required, array, size } of attributes) {
-        console.log(`creating  ${key}: type=${type} array=${array} size=${size}`)
         if (await hasAttribute(key)) {
-            console.log("skip");
+            console.log(`skip  ${key}: type=${type} array=${array} size=${size}`)
+            await sleep(1_500);
             continue;
+        } else {
+            console.log(`creating  ${key}: type=${type} array=${array} size=${size}`)
         }
         if (type === "string") {
             await databases.createStringAttribute(DATABASE_ID, collectionId, key, size, required, undefined, array);
