@@ -55,12 +55,27 @@ for (const collectionId of schema.collections.map(({ $id }) => $id)) {
         }
     };
 
+    const hasAttribute = async (key) => {
+        try {
+            return await databases.getAttribute(DATABASE_ID, collectionId, key)
+        } catch {
+            return null
+        }
+    };
+
     if (!(await hasCollection())) {
+        console.log(`Found collection id=${collectionId} name=${name}`);
+    } else {
         console.log(`Creating collection id=${collectionId} name=${name}`);
         await databases.createCollection(DATABASE_ID, collectionId, name);
     }
+
     for (const { key, type, required, array, size } of attributes) {
         console.log(`creating  ${key}: type=${type} array=${array} size=${size}`)
+        if (await hasAttribute(key)) {
+            console.log("skip");
+            continue;
+        }
         if (type === "string") {
             await databases.createStringAttribute(DATABASE_ID, collectionId, key, size, required, undefined, array);
         }
