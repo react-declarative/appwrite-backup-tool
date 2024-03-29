@@ -24,7 +24,6 @@ const GET_COLLECTION = (id) => {
 };
 
 const DATABASE_ID = '64c4de8e7b30179809ef';
-const COLLECTION_ID = '64d7502a5ce9f881b680';
 
 const client = new sdk.Client();
 const databases = new sdk.Databases(client);
@@ -37,37 +36,39 @@ if (process.env.APPWRITE_SELF_SIGNED) {
     client.setSelfSigned();
 }
 
-const hasCollection = async () => {
-    try {
-        return await databases.getCollection(DATABASE_ID, COLLECTION_ID)
-    } catch {
-        return null
-    }
-}
-
 const sleep = (timeout = 1_000) => new Promise((res) => {
     setTimeout(() => {
       res();
     }, timeout);
 });
 
-const { attributes, name } = GET_COLLECTION(COLLECTION_ID);
 
-{
+for (const collectionId of schema.collections.map(({ $id }) => $id)) {
+    
+    const { attributes, name } = GET_COLLECTION(collectionId);
+
+    const hasCollection = async () => {
+        try {
+            return await databases.getCollection(DATABASE_ID, collectionId)
+        } catch {
+            return null
+        }
+    };
+
     if (!(await hasCollection())) {
-        console.log(`Creating collection id=${COLLECTION_ID} name=${name}`);
-        await databases.createCollection(DATABASE_ID, COLLECTION_ID, name);
+        console.log(`Creating collection id=${collectionId} name=${name}`);
+        await databases.createCollection(DATABASE_ID, collectionId, name);
     }
     for (const { key, type, required, array, size } of attributes) {
         console.log(`creating  ${key}: type=${type} array=${array} size=${size}`)
         if (type === "string") {
-            await databases.createStringAttribute(DATABASE_ID, COLLECTION_ID, key, size, required, undefined, array);
+            await databases.createStringAttribute(DATABASE_ID, collectionId, key, size, required, undefined, array);
         }
         if (type === "boolean") {
-            await databases.createBooleanAttribute(DATABASE_ID, COLLECTION_ID, key, required, undefined, array);
+            await databases.createBooleanAttribute(DATABASE_ID, collectionId, key, required, undefined, array);
         }
         if (type === "integer") {
-            await databases.createIntegerAttribute(DATABASE_ID, COLLECTION_ID, key, required, undefined, undefined, undefined, array);
+            await databases.createIntegerAttribute(DATABASE_ID, collectionId, key, required, undefined, undefined, undefined, array);
         }
         await sleep(1_500);
     }
