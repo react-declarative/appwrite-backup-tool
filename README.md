@@ -170,6 +170,53 @@ docker rmi $(docker images -a -q)
 docker network prune --force --filter until=1s
 ```
 
+## Moving from one machine to another
+
+> By using [docker-volume-snapshot](https://github.com/junedkhatri31/docker-volume-snapshot)
+
+1. Volumes list and export
+
+```bash
+sudo curl -SL https://raw.githubusercontent.com/junedkhatri31/docker-volume-snapshot/main/docker-volume-snapshot -o /usr/local/bin/docker-volume-snapshot
+sudo chmod +x /usr/local/bin/docker-volume-snapshot
+
+docker volume list
+# appwrite_appwrite-builds
+# appwrite_appwrite-cache
+# appwrite_appwrite-certificates
+# appwrite_appwrite-config
+# appwrite_appwrite-functions
+# appwrite_appwrite-influxdb
+# appwrite_appwrite-mariadb
+# appwrite_appwrite-redis
+# appwrite_appwrite-uploads
+
+docker-volume-snapshot create appwrite_appwrite-builds appwrite_appwrite-builds.tar
+docker-volume-snapshot create appwrite_appwrite-cache appwrite_appwrite-cache.tar
+docker-volume-snapshot create appwrite_appwrite-certificates appwrite_appwrite-certificates.tar
+docker-volume-snapshot create appwrite_appwrite-config appwrite_appwrite-config.tar
+docker-volume-snapshot create appwrite_appwrite-functions appwrite_appwrite-functions.tar
+docker-volume-snapshot create appwrite_appwrite-influxdb appwrite_appwrite-influxdb.tar
+docker-volume-snapshot create appwrite_appwrite-mariadb appwrite_appwrite-mariadb.tar
+docker-volume-snapshot create appwrite_appwrite-redis appwrite_appwrite-redis.tar
+docker-volume-snapshot create appwrite_appwrite-uploads appwrite_appwrite-uploads.tar
+```
+
+2. Volumes import
+
+```bash
+docker-volume-snapshot restore appwrite_appwrite-builds.tar appwrite_appwrite-builds
+docker-volume-snapshot restore appwrite_appwrite-cache.tar appwrite_appwrite-cache
+docker-volume-snapshot restore appwrite_appwrite-certificates.tar appwrite_appwrite-certificates
+docker-volume-snapshot restore appwrite_appwrite-config.tar appwrite_appwrite-config
+docker-volume-snapshot restore appwrite_appwrite-functions.tar appwrite_appwrite-functions
+docker-volume-snapshot restore appwrite_appwrite-influxdb.tar appwrite_appwrite-influxdb
+docker-volume-snapshot restore appwrite_appwrite-mariadb.tar appwrite_appwrite-mariadb
+docker-volume-snapshot restore appwrite_appwrite-redis.tar appwrite_appwrite-redis
+docker-volume-snapshot restore appwrite_appwrite-uploads.tar appwrite_appwrite-uploads
+```
+
+
 ## See also
 
 Looks like AppWrite file endpoint is limited `to 60 requests in every 1 minutes per IP address`. So [I added a delay](./scripts/restore.mjs), you can change it If you need to
