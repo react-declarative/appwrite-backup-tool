@@ -170,16 +170,18 @@ docker rmi $(docker images -a -q)
 docker network prune --force --filter until=1s
 ```
 
-## Moving from one machine to another
+## Moving Appwrite from one machine to another
 
-> By using [docker-volume-snapshot](https://github.com/junedkhatri31/docker-volume-snapshot)
+1. Install [docker-volume-snapshot](https://github.com/junedkhatri31/docker-volume-snapshot)
 
-1. Volumes list and export
-
-```bash
+```bach
 sudo curl -SL https://raw.githubusercontent.com/junedkhatri31/docker-volume-snapshot/main/docker-volume-snapshot -o /usr/local/bin/docker-volume-snapshot
 sudo chmod +x /usr/local/bin/docker-volume-snapshot
+```
 
+2. List volumes and export them
+
+```bash
 docker volume list
 # appwrite_appwrite-builds
 # appwrite_appwrite-cache
@@ -190,7 +192,11 @@ docker volume list
 # appwrite_appwrite-mariadb
 # appwrite_appwrite-redis
 # appwrite_appwrite-uploads
+```
 
+3. Export volumes from current machine
+
+```bash
 docker-volume-snapshot create appwrite_appwrite-builds appwrite_appwrite-builds.tar
 docker-volume-snapshot create appwrite_appwrite-cache appwrite_appwrite-cache.tar
 docker-volume-snapshot create appwrite_appwrite-certificates appwrite_appwrite-certificates.tar
@@ -202,7 +208,36 @@ docker-volume-snapshot create appwrite_appwrite-redis appwrite_appwrite-redis.ta
 docker-volume-snapshot create appwrite_appwrite-uploads appwrite_appwrite-uploads.tar
 ```
 
-2. Volumes import
+4. Share volumes from current machine by using web server and [ngrok](https://www.npmjs.com/package/ngrok)
+
+```bash
+python3 -m http.server 9999
+# ngrok http 9999
+```
+
+5. Download volumes on another machine
+
+```bash
+wget http://192.168.1.131:9999/appwrite_appwrite-builds.tar
+wget http://192.168.1.131:9999/appwrite_appwrite-cache.tar
+wget http://192.168.1.131:9999/appwrite_appwrite-certificates.tar
+wget http://192.168.1.131:9999/appwrite_appwrite-config.tar
+wget http://192.168.1.131:9999/appwrite_appwrite-functions.tar
+wget http://192.168.1.131:9999/appwrite_appwrite-influxdb.tar
+wget http://192.168.1.131:9999/appwrite_appwrite-mariadb.tar
+wget http://192.168.1.131:9999/appwrite_appwrite-redis.tar
+wget http://192.168.1.131:9999/appwrite_appwrite-uploads.tar
+```
+
+6. Initialize appwrite volumes by starting with docker-compose on another machine and immediately stoping it
+
+```bash
+docker-compose up
+```
+
+wait for docker images download and <kbd>Ctrl</kbd> + <kbd>C</kbd> to shutdown appwrite instance
+
+7. Import volumes data
 
 ```bash
 docker-volume-snapshot restore appwrite_appwrite-builds.tar appwrite_appwrite-builds
@@ -216,6 +251,11 @@ docker-volume-snapshot restore appwrite_appwrite-redis.tar appwrite_appwrite-red
 docker-volume-snapshot restore appwrite_appwrite-uploads.tar appwrite_appwrite-uploads
 ```
 
+8. Start appwrite again
+
+```bash
+docker-compose up -d --remove-orphans --renew-anon-volumes
+```
 
 ## See also
 
