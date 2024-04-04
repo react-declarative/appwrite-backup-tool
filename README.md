@@ -257,6 +257,26 @@ docker-volume-snapshot restore appwrite_appwrite-uploads.tar appwrite_appwrite-u
 docker-compose up -d --remove-orphans --renew-anon-volumes
 ```
 
+9. [Optional] Follow the appwrite [upgrade guide](https://appwrite.io/docs/advanced/self-hosting/update)
+
+```bash
+# parent_directory <= you run the command in this directory
+# └── appwrite
+#     └── docker-compose.yml
+
+docker run -it --rm \
+    --volume /var/run/docker.sock:/var/run/docker.sock \
+    --volume "$(pwd)"/appwrite:/usr/src/code/appwrite:rw \
+    --entrypoint="upgrade" \
+    appwrite/appwrite:1.5.4
+
+# appwrite <= navigate to the appwrite directory
+# └── docker-compose.yml
+
+cd appwrite/
+docker compose exec appwrite migrate
+```
+
 ## See also
 
 Looks like AppWrite file endpoint is limited `to 60 requests in every 1 minutes per IP address`. So [I added a delay](./scripts/restore.mjs), you can change it If you need to
