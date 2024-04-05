@@ -1,0 +1,9 @@
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-builds appwrite_appwrite-builds.tar
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-cache appwrite_appwrite-cache.tar
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-certificates appwrite_appwrite-certificates.tar
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-config appwrite_appwrite-config.tar
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-functions appwrite_appwrite-functions.tar
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-influxdb appwrite_appwrite-influxdb.tar
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-mariadb appwrite_appwrite-mariadb.tar
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-redis appwrite_appwrite-redis.tar
+call .\busybox.exe bash .\docker-volume-snapshot.sh create appwrite_appwrite-uploads appwrite_appwrite-uploads.tar

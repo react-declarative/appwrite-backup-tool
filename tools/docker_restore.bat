@@ -1,0 +1,9 @@
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-builds.tar appwrite_appwrite-builds
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-cache.tar appwrite_appwrite-cache
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-certificates.tar appwrite_appwrite-certificates
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-config.tar appwrite_appwrite-config
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-functions.tar appwrite_appwrite-functions
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-influxdb.tar appwrite_appwrite-influxdb
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-mariadb.tar appwrite_appwrite-mariadb
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-redis.tar appwrite_appwrite-redis
+call .\busybox.exe bash .\docker-volume-snapshot.sh restore appwrite_appwrite-uploads.tar appwrite_appwrite-uploads
