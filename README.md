@@ -229,15 +229,7 @@ wget http://192.168.1.131:9999/appwrite_appwrite-redis.tar
 wget http://192.168.1.131:9999/appwrite_appwrite-uploads.tar
 ```
 
-6. Initialize appwrite volumes by starting with docker-compose on another machine and immediately stoping it
-
-```bash
-docker-compose up
-```
-
-wait for docker images download and <kbd>Ctrl</kbd> + <kbd>C</kbd> to shutdown appwrite instance
-
-7. Import volumes data
+6. Import volumes data
 
 ```bash
 docker-volume-snapshot restore appwrite_appwrite-builds.tar appwrite_appwrite-builds
@@ -251,15 +243,15 @@ docker-volume-snapshot restore appwrite_appwrite-redis.tar appwrite_appwrite-red
 docker-volume-snapshot restore appwrite_appwrite-uploads.tar appwrite_appwrite-uploads
 ```
 
-8. Start appwrite again
+7. Start appwrite
 
 ```bash
 docker-compose up -d --remove-orphans --renew-anon-volumes
 ```
 
-9. [Optional] Follow the appwrite [upgrade guide](https://appwrite.io/docs/advanced/self-hosting/update)
+8. [Optional] Follow the appwrite [upgrade guide](https://appwrite.io/docs/advanced/self-hosting/update)
 
-> All those commands should be runned while previous appwrite installation still running!
+> When migrating, on clean machine restore volumes first, then run `docker-compose up`, the appwrite should not be started the first time. If It was, there is a cleanup script which remove everything from the docker on machine. When updating command should be executed while previous appwrite installation still running, dont stop it!
 
 ```bash
 # parent_directory <= you run the command in this directory
