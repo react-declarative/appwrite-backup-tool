@@ -259,6 +259,8 @@ docker-compose up -d --remove-orphans --renew-anon-volumes
 
 9. [Optional] Follow the appwrite [upgrade guide](https://appwrite.io/docs/advanced/self-hosting/update)
 
+> All those commands should be runned while previous appwrite installation still running!
+
 ```bash
 # parent_directory <= you run the command in this directory
 # └── appwrite
