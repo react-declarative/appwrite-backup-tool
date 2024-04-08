@@ -49,27 +49,22 @@ for (const { name, attributes } of pendingSchema.collections) {
     if (item.type !== prevItem.type) {
       console.log(`CHANGED ${item.key} (type ${prevItem.type} -> ${item.type})`);
       isNothingFound = false;
-      continue;
     }
     if (item.required !== prevItem.required) {
       console.log(`CHANGED ${item.key} (required ${prevItem.required} -> ${item.required})`);
       isNothingFound = false;
-      continue;
     }
     if (item.array !== prevItem.array) {
       console.log(`CHANGED ${item.key} (array ${prevItem.array} -> ${item.array})`);
       isNothingFound = false;
-      continue;
     }
     if (item.size !== prevItem.size) {
       console.log(`CHANGED ${item.key} (size ${prevItem.size} -> ${item.size})`);
       isNothingFound = false;
-      continue;
     }
     if (item.default !== prevItem.default) {
       console.log(`CHANGED ${item.key} (default ${prevItem.default} -> ${item.default})`);
       isNothingFound = false;
-      continue;
     }
   }
 
