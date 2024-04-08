@@ -28,7 +28,8 @@ for (const { name, attributes } of pendingSchema.collections) {
 
   for (const item of [...currentAttributesSet]) {
     if (!prevAttributesSet.has(item)) {
-      console.log(`ADD ${item}`);
+      const { type, size, array } = attributes.find(({ key }) => key === item);
+      console.log(`ADD ${item} type=${type} size=${size} array=${array}`);
       isNothingFound = false;
     }
   }
