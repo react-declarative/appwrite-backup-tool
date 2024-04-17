@@ -67,7 +67,11 @@ for (const collectionId of schema.collections.map(({ $id }) => $id)) {
         console.log(`Found collection id=${collectionId} name=${name}`);
     } else {
         console.log(`Creating collection id=${collectionId} name=${name}`);
-        await databases.createCollection(DATABASE_ID, collectionId, name);
+        await databases.createCollection(DATABASE_ID, collectionId, name, [
+            sdk.Permission.create(sdk.Role.users()),
+            sdk.Permission.read(sdk.Role.users()),
+            sdk.Permission.update(sdk.Role.users()),
+        ]);
     }
 
     for (const { key, type, required, array, size } of attributes) {
