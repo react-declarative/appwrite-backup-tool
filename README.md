@@ -10,6 +10,11 @@ This backup tool will generate query for each document in AppWrite database and 
 
 Got a question? Feel free to [ask It in issues](https://github.com/react-declarative/appwrite-backup-tool/issues), I need traffic
 
+## Contribute
+
+> [!IMPORTANT]
+> There is another project named [react-declarative](https://github.com/react-declarative/react-declarative) build especially for AppWrite Realtime development. **⭐Star** and **💻Fork** It on github will be appreciated
+
 ## Setup
 
 1. Install [Appwrite CLI](https://appwrite.io/docs/command-line) and login
