@@ -4,6 +4,7 @@
   "description": "AppWrite backup toolset",
   "scripts": {
     "appwrite:backup": "node ./scripts/backup.mjs",
+    "appwrite:backup-collection": "node ./scripts/backup-collection.mjs",
     "appwrite:restore": "node ./scripts/restore.mjs",
     "appwrite:diff": "node ./scripts/diff.mjs",
     "appwrite:create-users": "node ./scripts/create-users.mjs",
