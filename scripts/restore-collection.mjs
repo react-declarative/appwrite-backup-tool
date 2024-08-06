@@ -9,6 +9,19 @@ import path from "path";
 
 const require = Module.createRequire(import.meta.url);
 
+const HAS_COLLECTION_ATTRIBUTE = (collectionId, attributeKey) => {
+  const collection = schema.collections.find(
+    (item) => item.$id === collectionId
+  );
+  if (!collection) {
+    return false;
+  }
+  const attribute = collection.attributes.find(
+    (item) => item.key === attributeKey
+  );
+  return !!attribute;
+};
+
 if (!existsSync(".env")) {
   console.log("Missing .env file. Please use .env.example as a template");
   process.exit(-1);
@@ -45,6 +58,27 @@ if (process.env.APPWRITE_SELF_SIGNED) {
 
 const databases = new sdk.Databases(client);
 
+const tryRead = async (databaseId, collectionId, documentId) => {
+  try {
+    return await databases.getDocument(databaseId, collectionId, documentId);
+  } catch {
+    return null;
+  }
+};
+
+const writeTransform = (data, collectionId) => {
+  const userEntries = Object.entries(data)
+    .filter(([key]) => !key.startsWith("$"))
+    .filter(([key]) => {
+      const hasAttribute = HAS_COLLECTION_ATTRIBUTE(collectionId, key);
+      if (!hasAttribute) {
+        console.log(`SKIP ATTRIBUTE key=${key} collection=${collectionId}`);
+      }
+      return hasAttribute;
+    })
+  return Object.fromEntries(userEntries);
+};
+
 const sleep = (timeout = 1_000) =>
   new Promise((res) => {
     setTimeout(() => {
@@ -59,10 +93,10 @@ await fs.mkdir("backup/databases", { recursive: true });
   console.log(`Found ${total} databases!`);
   for (const database of databasesList) {
     const collections = entries.map(FIND_COLLECTION);
-    console.log(`Found ${total} collections id ${database.$id}!`);
+    console.log(`Found ${collections.length} collections id ${database.$id}!`);
     for (const collection of collections) {
       const databaseFiles = await glob(
-        `backup/databases/*/${collection}/*.json`,
+        `backup/databases/*/${collection.$id}/*.json`,
         {
           withFileTypes: true,
           stat: true,
@@ -70,7 +104,7 @@ await fs.mkdir("backup/databases", { recursive: true });
       );
       databaseFiles.sort((a, b) => a.mtime - b.mtime);
       console.log(
-        `Found ${databaseFiles.length} collection ${collection} documents`,
+        `Found ${databaseFiles.length} collection ${collection.$id} documents`,
       );
       for (const fileRef of databaseFiles) {
         const file = fileRef.fullpathPosix();
