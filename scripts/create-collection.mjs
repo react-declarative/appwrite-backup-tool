@@ -7,6 +7,7 @@ import sdk from "node-appwrite";
 const require = Module.createRequire(import.meta.url);
 
 const schema = require(path.join(process.cwd(), "./appwrite.json"));
+const entries = process.argv.slice(2);
 
 if (!existsSync(".env")) {
   console.log("Missing .env file. Please use .env.example as a template");
@@ -14,6 +15,13 @@ if (!existsSync(".env")) {
 }
 
 dotenv.config();
+
+const SHOULD_COLLECTION = (name) => {
+    if (!entries.length) {
+        return true;
+    }
+    return entries.includes(name);
+};
 
 const GET_COLLECTION = (id) => {
     const collection = schema.collections.find((item) => item.$id === id);
@@ -62,6 +70,10 @@ for (const collectionId of schema.collections.map(({ $id }) => $id)) {
             return null
         }
     };
+
+    if (!SHOULD_COLLECTION(name)) {
+        continue
+    }
 
     if (await hasCollection()) {
         console.log(`Found collection id=${collectionId} name=${name}`);
