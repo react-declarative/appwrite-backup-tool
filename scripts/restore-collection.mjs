@@ -138,20 +138,3 @@ await fs.mkdir("backup/databases", { recursive: true });
     }
   }
 }
-
-{
-  console.log("Checking backup consistence...");
-  const databaseFiles = await glob(`backup/databases/*/*/*.json`);
-  let isOk = true;
-  for (const file of databaseFiles) {
-    try {
-      JSON.parse(await fs.readFile(file));
-    } catch {
-      isOk = false;
-      console.log(`${file} is broken!`);
-    }
-  }
-  if (isOk) {
-    console.log("Everything is OK");
-  }
-}
