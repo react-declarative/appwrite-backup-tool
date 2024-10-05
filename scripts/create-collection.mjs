@@ -31,7 +31,15 @@ const GET_COLLECTION = (id) => {
     return collection;
 };
 
-const DATABASE_ID = '64c4de8e7b30179809ef';
+const GET_DATABASE_ID = () => {
+    const databese = schema.databases[0];
+    if (!databese) {
+      throw new Error(`database not found: ${id}`);
+    }
+    return databese.$id;
+};
+
+const DATABASE_ID = GET_DATABASE_ID();
 
 const client = new sdk.Client();
 const databases = new sdk.Databases(client);
