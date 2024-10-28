@@ -23,6 +23,7 @@ const DOCUMENTS_PAGE_SIZE = 100;
 
 const FILE_READ_DELAY = 1_000;
 
+
 const client = new sdk.Client();
 
 client.setEndpoint(process.env.APPWRITE_ENDPOINT)
@@ -111,7 +112,10 @@ await fs.mkdir("backup/databases", { recursive: true });
   console.log(`Found ${total} databases!`);
   for (const database of databasesList) {
     const { collections, total } = await databases.listCollections(
-      database.$id
+      database.$id,
+      [
+        sdk.Query.limit(5_000)
+      ]
     );
     console.log(`Found ${total} collections id ${database.$id}!`);
     for (const collection of collections) {
