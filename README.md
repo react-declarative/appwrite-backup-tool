@@ -10,7 +10,7 @@ This backup tool will generate query for each document in AppWrite database and 
 
 Got a question? Feel free to [ask It in issues](https://github.com/react-declarative/appwrite-backup-tool/issues), I need traffic
 
-## Free local Backups the Cloud and Open Sourced for Self Hosted
+## Free local Backups for the Cloud and Open Sourced for Self Hosted
 
 > [!NOTE]
 > Free forever. Crontab ready
