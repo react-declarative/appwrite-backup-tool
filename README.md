@@ -12,7 +12,7 @@ Got a question? Feel free to [ask It in issues](https://github.com/react-declara
 
 ## Free Backups for Self Hosted Appwrite
 
-> [!INFO]
+> [!NOTE]
 > Free forever. Crontab ready
 
 ## Contribute
