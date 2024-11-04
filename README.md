@@ -1,4 +1,4 @@
-# appwrite-backup-tool
+# 🔥 appwrite-backup-tool
 
 > Minimalistic Appwrite schema dumper with data backup, restore features
 
