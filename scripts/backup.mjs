@@ -16,12 +16,12 @@ dotenv.config();
 const TOTAL_FILES_LIMIT = 100_000;
 const FILES_PAGE_SIZE = 100;
 
-const DOCUMENT_READ_DELAY = 100;
+const DOCUMENT_READ_DELAY = 1;
 
 const TOTAL_DOCUMENTS_LIMIT = 100_000;
 const DOCUMENTS_PAGE_SIZE = 100;
 
-const FILE_READ_DELAY = 1_000;
+const FILE_READ_DELAY= 1;
 
 
 const client = new sdk.Client();

@@ -44,7 +44,7 @@ const FIND_COLLECTION = (name) => {
 
 dotenv.config();
 
-const DOCUMENT_WRITE_DELAY = 100;
+const DOCUMENT_WRITE_DELAY = 1;
 
 const client = new sdk.Client();
 
